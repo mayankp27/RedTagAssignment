@@ -1,0 +1,6 @@
+{
+    "bestSeller": "الأكثر مبيعًا",
+    "extraOff": "خصم إضافي 50 ريال سعودي، رمز STYL",
+    "currency": "${currency} ${amount}",
+    "priceOff": "${percentage}% خصم"
+}
