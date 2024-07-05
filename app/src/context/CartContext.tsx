@@ -1,4 +1,3 @@
-// src/context/CartContext.js
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -19,8 +18,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         AsyncStorage.setItem('cart', JSON.stringify(cart));
     }, [cart]);
 
+    const addToCart = (product: {}) => {
+        setCart([...cart, product]);
+    };
+
     return (
-        <CartContext.Provider value={{ cart, setCart }}>
+        <CartContext.Provider value={{ cart, setCart, addToCart }}>
             {children}
         </CartContext.Provider>
     );

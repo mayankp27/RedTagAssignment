@@ -2,5 +2,5 @@
     "bestSeller": "Best Seller",
     "extraOff": "Extra SAR 50 Off, Code STYL",
     "currency": "${currency} ${amount}",
-    "priceOff": "${percentage}% OFF"
+    "priceOff": "{{percentage}}% OFF"
 }
