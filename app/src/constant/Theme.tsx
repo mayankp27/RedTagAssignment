@@ -1,3 +1,4 @@
+//based on theme will render UI like, light,dark,shadoow and more.
 export const Theme = {
     shadow: {
         shadowColor: "#000",

@@ -7,10 +7,10 @@ import { Theme } from '../constant/Theme';
 import { Feather } from '@expo/vector-icons';
 import { Images } from '../assets/images';
 import { Ionicons } from '@expo/vector-icons';
-import { calculatePercentageOff } from '../context/utils';
 import i18n from '../locales/i18n';
 import { CartContext } from '../context/CartContext';
-
+import { appLanguages, calculatePercentageOff } from '../constant/Utility';
+import { productCardStyles as styles } from '../styles/productCardStyle';
 
 type Language = 'en' | 'ar';
 
@@ -27,14 +27,15 @@ const ProductCard = ({ product, language }: {
     },
     language: Language
 }) => {
-    const isArabic = language === "ar"
+    const isArabic = language === appLanguages.ar
     const { addToCart } = useContext(CartContext);
+
     useEffect(() => {
         i18n.locale = language
     }, [language])
 
+    //Calculate the percentag off. 
     const renderPercentage = () => {
-        // const percentageOffMessage = `${calculatePercentageOff(product.compare_at_price_min, product.price_min)}% OFF`;
         const percentage = calculatePercentageOff(product.compare_at_price_min, product.price_min);
         const percentageOffMessage = i18n.t('priceOff', { percentage });
         return <View
@@ -44,12 +45,15 @@ const ProductCard = ({ product, language }: {
         </View>
     }
 
+    // On click add to cart button.
     const addButtonPress = () => {
         addToCart(product);
         animateButtonPress();
     }
 
     const buttonScale = useSharedValue(1);
+
+    // Animate the cartButton when user add product in cart
     const animateButtonPress = () => {
         buttonScale.value = withTiming(2, { duration: 200 });
         setTimeout(() => {
@@ -134,94 +138,3 @@ const ProductCard = ({ product, language }: {
 
 export default ProductCard;
 
-const styles = StyleSheet.create({
-    productImage: {
-        height: 250,
-        width: '100%',
-        backgroundColor: Colors.themeGreyColor,
-        justifyContent: 'space-between'
-    },
-    heartIcon: {
-        alignSelf: 'flex-end',
-        marginTop: 10,
-        marginRight: 10
-    },
-    bestSellerTagCnt: {
-        backgroundColor: 'white',
-        alignSelf: 'flex-end',
-        padding: 5,
-        marginBottom: "15%",
-        borderTopLeftRadius: 5,
-        borderBottomLeftRadius: 5
-    },
-    bestSellerTxt: {
-        fontSize: 12,
-        fontWeight: '600',
-        color: 'red',
-    },
-    addToCartCnt: {
-        backgroundColor: Colors.white,
-        borderRadius: 1000,
-        marginTop: '-10%',
-        alignSelf: 'flex-end',
-        margin: 4,
-        ...Theme.shadow
-    },
-    addToCartIcon: {
-        height: 35,
-        width: 35,
-    },
-    cardTitle: {
-        fontSize: 12,
-        fontWeight: '500',
-        width: '95%'
-    },
-    priceCnt: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginTop: 5
-    },
-    currencyStyle: {
-        fontSize: 8,
-        color: 'red',
-        fontWeight: '600'
-    },
-    priceMinStyle: {
-        fontSize: 12,
-        color: 'black',
-        fontWeight: 'normal',
-        textDecorationLine: 'line-through',
-        marginLeft: 3
-    },
-    percentageOffStyleCnt: {
-        borderWidth: 1,
-        padding: 5,
-        borderRadius: 5,
-        paddingVertical: 3
-    },
-    percentageOffTxt: {
-        fontSize: 10,
-        fontWeight: '700',
-        color: 'red'
-    },
-    tagCnt: {
-        borderWidth: 1,
-        padding: 5,
-        borderRadius: 3,
-        flexDirection: 'row',
-        borderStyle: 'dashed',
-        marginTop: 10,
-        marginBottom: 15,
-        borderColor: 'red',
-        alignItems: 'center',
-        alignSelf: 'flex-start',
-        marginHorizontal: 5,
-    },
-    tagTxtStyle: {
-        fontSize: 10,
-        marginLeft: 4,
-        fontWeight: '600',
-        color: 'black'
-    }
-})

@@ -1,3 +1,4 @@
+//using colors in application
 export const Colors = {
     white: "#ffffff",
     lightGrey: 'lightgrey',

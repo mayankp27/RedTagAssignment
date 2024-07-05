@@ -6,6 +6,7 @@ import App from './src/App';
 const Layout = () => {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
+      {/* Register app HOC here. */}
       <App />
     </GestureHandlerRootView>
   );

@@ -8,12 +8,14 @@ import ProductTypeList from '../components/ProductTypeList';
 import { fetchData } from '../context/Services';
 import i18n from '../locales/i18n';
 import Loader from '../components/Loader';
+import { appLanguages } from '../constant/Utility';
 
 const ProductListScreen = () => {
     const [products, setProducts] = useState([]);
-    const [language, setLanguage] = useState('en');
+    const [language, setLanguage] = useState(appLanguages.en);
     const [loader, setLoader] = useState(false)
 
+    // Get the prefred language from the device Async default is "en"
     useEffect(() => {
         const loadLanguage = async () => {
             const storedLanguage = await AsyncStorage.getItem('language');
@@ -22,6 +24,7 @@ const ProductListScreen = () => {
         loadLanguage();
     }, []);
 
+    // while switch language api call and fetch the data based on selected language.
     useEffect(() => {
         setLoader(true)
         i18n.locale = language
@@ -40,9 +43,10 @@ const ProductListScreen = () => {
         }
     }, [language]);
 
+    // Switch language on click switch button, store language in Async.
     const switchLanguage = async () => {
         setLoader(true)
-        const newLanguage = language === 'en' ? 'ar' : 'en';
+        const newLanguage = language === appLanguages.en ? appLanguages.ar : appLanguages.en;
         setLanguage(newLanguage);
         await AsyncStorage.setItem('language', newLanguage);
     };

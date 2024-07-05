@@ -3,6 +3,7 @@ import React from 'react'
 import SkeletonLoader from 'expo-skeleton-loader'
 
 const Loader = () => {
+    // We are loading the skeleton loader when api fetching the data in background.
     return (
         <FlatList
             data={[1, 2, 3, 4, 5, 6]}

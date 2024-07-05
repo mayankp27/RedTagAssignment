@@ -4,9 +4,10 @@ import { Colors } from '../constant/Colors'
 import { headerFashionsArray } from '../assets/LocalJson'
 import i18n from '../locales/i18n'
 import { Theme } from '../constant/Theme'
+import { appLanguages } from '../constant/Utility'
 
 const ProductTypeList = () => {
-    const isArabic = i18n._locale === "ar" ? true : false
+    const isArabic = i18n._locale === appLanguages.ar ? true : false
     const [selectedOptionIndex, setSelectedIndex] = useState(0)
     return (
         <FlatList

@@ -2,12 +2,13 @@ import { View, Text, Switch, Image, StyleSheet, Platform } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { Colors } from '../constant/Colors'
 import { CartContext } from '../context/CartContext'
-import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated'
-import * as Font from 'expo-font';
+import Animated, { useAnimatedStyle, useSharedValue, withDelay, withSequence, withSpring, withTiming } from 'react-native-reanimated'
+import { appLanguages, urls } from '../constant/Utility'
+import { HeaderStyle as style } from '../styles/headerStyle'
 
 const Header = ({
     onPressSwitch = () => null,
-    language = "en" || "es"
+    language = appLanguages.en || appLanguages.ar
 }: {
     onPressSwitch: () => void
     language: string
@@ -15,20 +16,23 @@ const Header = ({
     const { cart } = useContext(CartContext);
     const [cartLength, setCartLength] = useState(cart.length);
 
+
     const cartLengthValue = useSharedValue(cart.length);
 
+    // When we add product in cart this function will animated cart count.
     useEffect(() => {
-        if (cart.length > 0) {
-            cartLengthValue.value = withSpring(cart.length);
+        if (cart.length) {
+            cartLengthValue.value = withSequence(
+                withTiming(1.5, { duration: 300 }),
+                withDelay(300, withTiming(1, { duration: 300 }))
+            );
             setCartLength(cart.length);
         }
     }, [cart.length]);
 
     const animatedStyle = useAnimatedStyle(() => {
         return {
-            transform: [
-                { scale: withTiming(cartLengthValue.value > cartLength ? 1.5 : 1, { duration: 300 }) }
-            ]
+            transform: [{ scale: cartLengthValue.value }]
         };
     });
 
@@ -36,7 +40,7 @@ const Header = ({
         <View style={style.cnt}>
             <Switch
                 onChange={onPressSwitch}
-                value={language === "en" ? true : false}
+                value={language === appLanguages.en ? true : false}
                 style={{
                     marginLeft: Platform.OS === "ios" ? 0 : -10,
                 }}
@@ -49,54 +53,18 @@ const Header = ({
             }]}>
                 <Image
                     source={{
-                        uri: "https://cdn.shopify.com/s/files/1/0604/1151/1030/files/Cart_Icon_f10a0529-6bd2-437d-a8dd-e6066d6702b2.png?v=1699525506"
+                        uri: urls.cartIcon
                     }}
                     style={style.cartIcon}
                 />
-                <Animated.View style={[style.cardItemCnt, animatedStyle]}>
-                    <Text style={style.cardItemCount}>{cart.length > 9 ? "9+" : JSON.stringify(cart.length)}</Text>
-                </Animated.View>
+                {cart.length > 0 &&
+                    <Animated.View style={[style.cardItemCnt, animatedStyle]}>
+                        <Text style={style.cardItemCount}>{cart.length > 9 ? "9+" : JSON.stringify(cart.length)}</Text>
+                    </Animated.View>
+                }
             </View>
         </View>
     )
 }
 
 export default Header
-
-const style = StyleSheet.create({
-    cnt: {
-        backgroundColor: Colors.white,
-        padding: 10,
-        marginTop: '10%',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: Platform.OS === "ios" ? '3%' : '0%'
-    },
-    title: {
-        width: '75%',
-        textAlign: 'center',
-        fontSize: 17,
-        fontWeight: 'bold',
-    },
-    cartIcon: {
-        height: 30,
-        width: 30,
-    },
-    cardItemCnt: {
-        position: 'absolute',
-        backgroundColor: 'red',
-        height: 20,
-        width: 20,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 1000,
-        alignSelf: 'flex-end',
-        bottom: -5
-    },
-    cardItemCount: {
-        color: Colors.white,
-        fontSize: 12,
-        fontWeight: 'semibold'
-    }
-})
