@@ -1,6 +1,6 @@
-import { View, Text, Switch, Image, StyleSheet } from 'react-native'
+import { View, Text, Switch, Image, StyleSheet, Platform } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
-import { Colors } from '../assets/Colors'
+import { Colors } from '../constant/Colors'
 import { CartContext } from '../context/CartContext'
 import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated'
 import * as Font from 'expo-font';
@@ -18,14 +18,16 @@ const Header = ({
     const cartLengthValue = useSharedValue(cart.length);
 
     useEffect(() => {
-        cartLengthValue.value = withSpring(cart.length);
-        setCartLength(cart.length);
+        if (cart.length > 0) {
+            cartLengthValue.value = withSpring(cart.length);
+            setCartLength(cart.length);
+        }
     }, [cart.length]);
 
     const animatedStyle = useAnimatedStyle(() => {
         return {
             transform: [
-                { scale: withTiming(cartLengthValue.value > cartLength ? 1.2 : 1, { duration: 300 }) }
+                { scale: withTiming(cartLengthValue.value > cartLength ? 1.5 : 1, { duration: 300 }) }
             ]
         };
     });
@@ -36,25 +38,25 @@ const Header = ({
                 onChange={onPressSwitch}
                 value={language === "en" ? true : false}
                 style={{
-                    marginLeft: -10
+                    marginLeft: Platform.OS === "ios" ? 0 : -10,
                 }}
-                trackColor={{ true: 'grey', false: 'grey' }}
-                thumbColor={language === "en" ? "green" : "lightgrey"}
+                trackColor={{ true: Colors.lightGrey, false: Colors.lightGrey }}
+                thumbColor={language === "en" ? Colors.redBorderColor : Colors.themeGreyColor}
             />
             <Text style={style.title}>Womens Collection Sale</Text>
-            <Animated.View style={[{
+            <View style={[{
                 justifyContent: 'flex-end'
-            }, animatedStyle]}>
+            }]}>
                 <Image
                     source={{
                         uri: "https://cdn.shopify.com/s/files/1/0604/1151/1030/files/Cart_Icon_f10a0529-6bd2-437d-a8dd-e6066d6702b2.png?v=1699525506"
                     }}
                     style={style.cartIcon}
                 />
-                <View style={style.cardItemCnt}>
+                <Animated.View style={[style.cardItemCnt, animatedStyle]}>
                     <Text style={style.cardItemCount}>{cart.length > 9 ? "9+" : JSON.stringify(cart.length)}</Text>
-                </View>
-            </Animated.View>
+                </Animated.View>
+            </View>
         </View>
     )
 }
@@ -69,6 +71,7 @@ const style = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
+        marginBottom: Platform.OS === "ios" ? '3%' : '0%'
     },
     title: {
         width: '75%',

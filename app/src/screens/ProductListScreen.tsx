@@ -7,7 +7,6 @@ import Header from '../components/Header';
 import ProductTypeList from '../components/ProductTypeList';
 import { fetchData } from '../context/Services';
 import i18n from '../locales/i18n';
-import SkeletonLoader from 'expo-skeleton-loader';
 import Loader from '../components/Loader';
 
 const ProductListScreen = () => {
@@ -49,7 +48,7 @@ const ProductListScreen = () => {
     };
 
     return (
-        <SafeAreaView style={globalStyles.container}>
+        <View style={globalStyles.container}>
             <Header
                 onPressSwitch={switchLanguage}
                 language={language}
@@ -71,8 +70,7 @@ const ProductListScreen = () => {
                     }}
                 />
             }
-
-        </SafeAreaView>
+        </View>
     );
 };
 

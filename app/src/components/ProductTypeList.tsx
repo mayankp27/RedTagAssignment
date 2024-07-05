@@ -1,9 +1,9 @@
 import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
-import { Colors } from '../assets/Colors'
+import { Colors } from '../constant/Colors'
 import { headerFashionsArray } from '../assets/LocalJson'
 import i18n from '../locales/i18n'
-import { Theme } from '../assets/Theme'
+import { Theme } from '../constant/Theme'
 
 const ProductTypeList = () => {
     const isArabic = i18n._locale === "ar" ? true : false
